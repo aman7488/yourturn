@@ -8,6 +8,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+export const dynamic = "force-dynamic";
+
 const AllProducts = () => {
     const { currency } = useAppContext();
     const [products, setProducts] = useState([]);
