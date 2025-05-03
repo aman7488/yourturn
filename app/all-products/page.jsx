@@ -4,17 +4,25 @@ import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
+import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const AllProducts = () => {
     const { currency } = useAppContext();
     const [products, setProducts] = useState([]);
-    const [activeCategory, setActiveCategory] = useState("Men");
-    const [indicatorStyle, setIndicatorStyle] = useState({});
-    const tabRefs = useRef({});
 
     const categories = ["Men", "Women", "Kids"];
+
+    // const [activeCategory, setActiveCategory] = useState("Men");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const categoryFromURL = searchParams.get("category");
+    const defaultCategory = categories.includes(categoryFromURL) ? categoryFromURL : "Men";
+    const [activeCategory, setActiveCategory] = useState(defaultCategory);
+
+    const [indicatorStyle, setIndicatorStyle] = useState({});
+    const tabRefs = useRef({});
 
     const fetchProductData = async () => {
         try {
@@ -34,7 +42,6 @@ const AllProducts = () => {
     }, []);
 
     useEffect(() => {
-        // Update underline position and width
         const ref = tabRefs.current[activeCategory];
         if (ref) {
             const rect = ref.getBoundingClientRect();
@@ -50,6 +57,13 @@ const AllProducts = () => {
         (product) => product.category === activeCategory
     );
 
+    useEffect(() => {
+        const categoryFromURL = searchParams.get("category");
+        if (categoryFromURL && categories.includes(categoryFromURL)) {
+          setActiveCategory(categoryFromURL);
+        }
+      }, [searchParams]);
+    
     return (
         <>
             <Navbar />
@@ -65,10 +79,12 @@ const AllProducts = () => {
                         <button
                             key={category}
                             ref={(el) => (tabRefs.current[category] = el)}
-                            onClick={() => setActiveCategory(category)}
-                            className={`pb-2 text-base font-medium transition-colors duration-200 ${
-                                activeCategory === category ? "text-orange-600" : "text-gray-500"
-                            }`}
+                            onClick={() => {
+                                setActiveCategory(category);
+                                router.push(`/all-products?category=${category}`);
+                            }}
+                            className={`pb-2 text-base font-medium transition-colors duration-200 ${activeCategory === category ? "text-orange-600" : "text-gray-500"
+                                }`}
                         >
                             {category}
                         </button>
