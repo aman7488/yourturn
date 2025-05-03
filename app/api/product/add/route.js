@@ -29,6 +29,7 @@ export async function POST(req) {
         const price = formData.get("price");
         const category = formData.get("category");
         const offerPrice = formData.get("offerPrice");
+        const size = formData.get("size");
 
         const files = formData.getAll("images");
         if (!files || files.length === 0) {
@@ -68,6 +69,7 @@ export async function POST(req) {
             offerPrice: Number(offerPrice),
             image: images,
             date: Date.now(),
+            size,
         })
 
         return NextResponse.json({ success: true, message: "Product added successfully", newProduct }, { status: 201 });

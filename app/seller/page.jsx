@@ -17,6 +17,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [size, setSize] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ const AddProduct = () => {
     formData.append("price", price);
     formData.append("category", category);
     formData.append("offerPrice", offerPrice);
+    formData.append("size", size);
     files.forEach((file) => {
       if (file) {
         formData.append("images", file);
@@ -35,14 +37,14 @@ const AddProduct = () => {
 
     try {
       const token = await getToken();
-      
+
       const { data } = await axios.post("/api/product/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (data.success) {
         toast.success(data.message);
         setFiles([]);
@@ -51,6 +53,7 @@ const AddProduct = () => {
         setCategory("Earphone");
         setPrice("");
         setOfferPrice("");
+        setSize("");
       } else {
         toast.error(data.message);
       }
@@ -128,15 +131,32 @@ const AddProduct = () => {
               id="category"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               onChange={(e) => setCategory(e.target.value)}
-              defaultValue={category}
+              value={category}
+              required
             >
-              <option value="Earphone">Earphone</option>
-              <option value="Headphone">Headphone</option>
-              <option value="Watch">Watch</option>
-              <option value="Smartphone">Smartphone</option>
-              <option value="Laptop">Laptop</option>
-              <option value="Camera">Camera</option>
-              <option value="Accessories">Accessories</option>
+              <option value="">Select</option>
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Kids">Kids</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1 w-32">
+            <label className="text-base font-medium" htmlFor="size">
+              Size
+            </label>
+            <select
+              id="size"
+              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              onChange={(e) => setSize(e.target.value)}
+              value={size}
+            >
+              <option value="">Select</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
             </select>
           </div>
           <div className="flex flex-col gap-1 w-32">

@@ -7,6 +7,7 @@ import Footer from "@/components/seller/Footer";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { FiTrash2 } from "react-icons/fi";
 
 const ProductList = () => {
 
@@ -35,6 +36,29 @@ const ProductList = () => {
       toast.error(error.message);
     }
   }
+
+  const deleteProduct = async (productId) => {
+    const confirm = window.confirm("Are you sure you want to delete this product?");
+    if (!confirm) return;
+
+    try {
+      const token = await getToken();
+      const { data } = await axios.delete(`/api/product/delete/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        toast.success("Product deleted successfully");
+        fetchSellerProduct();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -78,15 +102,28 @@ const ProductList = () => {
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
                   <td className="px-4 py-3">${product.offerPrice}</td>
                   <td className="px-4 py-3 max-sm:hidden">
-                    <button onClick={() => router.push(`/product/${product._id}`)} className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md">
-                      <span className="hidden md:block">Visit</span>
-                      <Image
-                        className="h-3.5"
-                        src={assets.redirect_icon}
-                        alt="redirect_icon"
-                      />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => router.push(`/product/${product._id}`)}
+                        className="flex items-center gap-1 px-2 py-2 bg-orange-600 text-white rounded-md"
+                      >
+                        <span className="hidden md:block">Visit</span>
+                        <Image
+                          className="h-3.5"
+                          src={assets.redirect_icon}
+                          alt="redirect_icon"
+                        />
+                      </button>
+                      <button
+                        onClick={() => deleteProduct(product._id)}
+                        className="flex items-center gap-1 px-2 py-2 bg-red-600 text-white rounded-md"
+                      >
+                        <FiTrash2 className="text-sm" />
+                        <span className="hidden md:block">Delete</span>
+                      </button>
+                    </div>
                   </td>
+
                 </tr>
               ))}
             </tbody>

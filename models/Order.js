@@ -34,7 +34,12 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: Number,
         required: true,
-    }
+    },
+    paymentStatus: {
+        type: String,
+        required: true,
+        default: 'Pending',
+    },
 });
 
 const Order = mongoose.models.order || mongoose.model('order', orderSchema);

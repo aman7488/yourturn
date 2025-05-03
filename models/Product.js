@@ -33,6 +33,10 @@ const productSchema = new mongoose.Schema({
     date: {
         type: Number,
         required: true,
+    },
+    size: {
+        type: String,
+        required: false,
     }
 });
 
