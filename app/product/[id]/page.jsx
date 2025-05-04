@@ -9,12 +9,13 @@ import { useParams } from "next/navigation";
 import Loading from "@/components/Loading";
 import { useAppContext } from "@/context/AppContext";
 import React from "react";
+import { RotateCcw, CheckCircle2 } from "lucide-react";
 
 const Product = () => {
 
     const { id } = useParams();
 
-    const { products, router, addToCart } = useAppContext()
+    const { currency, products, router, addToCart } = useAppContext()
 
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);
@@ -85,9 +86,9 @@ const Product = () => {
                         {productData.description}
                     </p>
                     <p className="text-3xl font-medium mt-6">
-                        ${productData.offerPrice}
+                        {currency}{productData.offerPrice}
                         <span className="text-base font-normal text-gray-800/60 line-through ml-2">
-                            ${productData.price}
+                            {currency}{productData.price}
                         </span>
                     </p>
                     <hr className="bg-gray-600 my-6" />
@@ -120,6 +121,24 @@ const Product = () => {
                             Buy now
                         </button>
                     </div>
+
+                    <div className="flex flex-col gap-3 mt-6 text-sm text-gray-800/90">
+                        <div className="flex items-start gap-3">
+                            <RotateCcw className="w-5 h-5 text-gray-700 mt-0.5" />
+                            <div>
+                                <p><strong>10 day Return and Exchange</strong></p>
+                                <a target="_blank" href="/return-policy" className="text-blue-600 hover:underline text-sm font-medium">
+                                    Return and Exchange Policy
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-gray-700 mt-0.5" />
+                            <p><strong>Check COD availability at checkout</strong></p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div className="flex flex-col items-center">
