@@ -30,7 +30,7 @@ export default function ReturnPolicy() {
 
         <h2 className="text-xl font-semibold mt-6">How to Initiate a Return or Exchange:</h2>
         <ol className="list-decimal pl-6 space-y-1 text-gray-700">
-          <li>Contact us within 5 days of delivery at <strong>8884999644</strong>.</li>
+          <li>Contact us within 5 days of delivery at <strong>8884999644</strong> or <strong>asquareteam9@gmail.com</strong>.</li>
           <li>Provide your order number and details of the issue.</li>
           <li>We will guide you through the return process if your item is eligible.</li>
           <li>Upon receiving and verifying the item, store credit will be issued in the form of A Square Coupon or A Square Points.</li>
