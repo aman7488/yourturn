@@ -112,7 +112,11 @@ const Orders = () => {
                                     <p className="flex flex-col gap-3">
                                         <span className="font-medium">
                                             {Array.isArray(order.items) && order.items.length > 0
-                                                ? order.items.map((item) => item?.product?.name + ` x ${item.quantity}`).join(", ")
+                                                ? order.items
+                                                    .map((item) =>
+                                                        `${item?.product?.name} x ${item.quantity}${item.size ? ` (${item.size})` : ""}`
+                                                    )
+                                                    .join(", ")
                                                 : "No items"}
                                         </span>
                                         <span>Items : {order.items.length}</span>
@@ -180,6 +184,7 @@ const Orders = () => {
                                                     <p><strong>ID:</strong> {item.product._id}</p>
                                                     <p><strong>Name:</strong> {item.product.name}</p>
                                                     <p><strong>Qty:</strong> {item.quantity}</p>
+                                                    <p><strong>Size:</strong> {item.size || "N/A"}</p>
                                                 </div>
                                                 <a
                                                     href={`/product/${item.product._id}`}
