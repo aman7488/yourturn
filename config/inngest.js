@@ -76,8 +76,6 @@ export const createUserOrder = inngest.createFunction(
     },
     async ({ events }) => {
         const orders = events.map((event) => {
-            console.log("🛒 Orders to insert:", JSON.stringify(event.data.items, null, 2)); // 👈 Check here
-
             return {
                 userId: event.data.userId,
                 items: event.data.items,
@@ -88,7 +86,7 @@ export const createUserOrder = inngest.createFunction(
         })
 
         await connectDB();
-        console.log(JSON.stringify(event.data.items, null, 2));
+        // console.log(JSON.stringify(event.data.items, null, 2));
         await Order.insertMany(orders);
         return {
             success: true,
