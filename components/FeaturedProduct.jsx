@@ -20,7 +20,7 @@ const products = [
     id: 3,
     image: assets.kids_cat,
     title: "Kids",
-    description: "Denims, Trousers, Jogger’s, Track Pants, Shirts, Shorts, T-shirts for him & Dresses, Frocks, Jeans, Jeggings, Leggings Tops, T-shirts, Skirts, Shorts for her.",
+    description: "Denims, Trousers, Joggers, Track Pants, Shirts, Shorts, T-shirts for him & Frocks, Jeans, Leggings, Tops, T-shirts, Skirts, Shorts for her.",
   },
 ];
 

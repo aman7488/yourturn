@@ -29,8 +29,7 @@ export async function POST(req) {
         const price = formData.get("price");
         const category = formData.get("category");
         const offerPrice = formData.get("offerPrice");
-        const size = formData.get("size");
-
+        const size = formData.getAll("size");
         const files = formData.getAll("images");
         if (!files || files.length === 0) {
             return NextResponse.json({ success: false, message: "No files uploaded" }, { status: 400 });
@@ -57,7 +56,7 @@ export async function POST(req) {
             })
         );
 
-        const images = result.map((result) => result.secure_url);
+        const images = result.map((result) => result.secure_url);         
 
         await connectDB();
         const newProduct = await Product.create({
@@ -75,6 +74,7 @@ export async function POST(req) {
         return NextResponse.json({ success: true, message: "Product added successfully", newProduct }, { status: 201 });
 
     } catch (error) {
+        console.error("POST /api/product/add failed:", error);
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }

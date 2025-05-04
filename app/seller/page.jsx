@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Footer from "@/components/seller/Footer";
 
 const AddProduct = () => {
 
@@ -17,7 +18,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
-  const [size, setSize] = useState('');
+  const [size, setSize] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ const AddProduct = () => {
     formData.append("price", price);
     formData.append("category", category);
     formData.append("offerPrice", offerPrice);
-    formData.append("size", size);
+    size.forEach(s => formData.append("size", s));
     files.forEach((file) => {
       if (file) {
         formData.append("images", file);
@@ -140,24 +141,29 @@ const AddProduct = () => {
               <option value="Kids">Kids</option>
             </select>
           </div>
-          <div className="flex flex-col gap-1 w-32">
-            <label className="text-base font-medium" htmlFor="size">
-              Size
+          <div className="flex flex-col gap-1">
+            <label className="text-base font-medium">
+              Available Sizes
             </label>
-            <select
-              id="size"
-              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setSize(e.target.value)}
-              value={size}
-            >
-              <option value="">Select</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
+            <div className="flex gap-3 flex-wrap">
+              {["XS", "S", "M", "L", "XL", "XXL"].map((sizeOption) => (
+                <label key={sizeOption} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    value={sizeOption}
+                    checked={size.includes(sizeOption)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSize([...size, sizeOption]);
+                      } else {
+                        setSize(size.filter((s) => s !== sizeOption));
+                      }
+                    }}
+                  />
+                  {sizeOption}
+                </label>
+              ))}
+            </div>
           </div>
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-price">
@@ -192,7 +198,7 @@ const AddProduct = () => {
           ADD
         </button>
       </form>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

@@ -41,28 +41,39 @@ const OrderSummary = () => {
 
   const createOrder = async () => {
     try {
-
       if (!selectedAddress) {
         return toast.error("Please select an address");
       }
-
-      let cartItemsArray = Object.keys(cartItems).map((key) => ({ product: key, quantity: cartItems[key] }));
+  
+      let cartItemsArray = Object.keys(cartItems).map((key) => {
+        const [productId, size] = key.split(":");
+        return {
+          product: productId,
+          size,
+          quantity: cartItems[key],
+        };
+      });
+  
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0);
-
+  
       if (cartItemsArray.length === 0) {
         return toast.error("Your cart is empty");
       }
-
+  
       const token = await getToken();
-      const { data } = await axios.post('/api/order/create', {
-        address: selectedAddress._id,
-        items: cartItemsArray,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const { data } = await axios.post(
+        "/api/order/create",
+        {
+          address: selectedAddress._id,
+          items: cartItemsArray,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
         }
-      })
-
+      );
+  
       if (data.success) {
         toast.success(data.message);
         setCartItems({});
@@ -70,11 +81,10 @@ const OrderSummary = () => {
       } else {
         toast.error(data.message);
       }
-
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     if (user) {
@@ -100,9 +110,14 @@ const OrderSummary = () => {
             >
               <span>
                 {selectedAddress
-                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
+                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state} - ${selectedAddress.pincode} | `
                   : "Select Address"}
               </span>
+              {selectedAddress && (
+                <span className="text-sm text-gray-600">
+                  Mob: {selectedAddress.phoneNumber}
+                </span>
+              )}
               <svg className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6B7280"
               >
@@ -118,7 +133,10 @@ const OrderSummary = () => {
                     className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
                     onClick={() => handleAddressSelect(address)}
                   >
-                    {address.fullName}, {address.area}, {address.city}, {address.state}
+                    <div className="text-sm">
+                      {address.fullName}, {address.area}, {address.city}, {address.state} - {address.pincode}
+                    </div>
+                    <div className="text-xs text-gray-600">Mob: {address.phoneNumber}</div>
                   </li>
                 ))}
                 <li

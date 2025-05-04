@@ -16,11 +16,11 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true,
+        required: false,
     },
     offerPrice: {
         type: Number,
-        required: false,
+        required: true,
     },
     image: {
         type: Array,
@@ -35,9 +35,9 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     size: {
-        type: String,
+        type: [String],
         required: false,
-    }
+    },
 });
 
 const Product = mongoose.models.product || mongoose.model('product', productSchema);

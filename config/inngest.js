@@ -6,7 +6,6 @@ import Order from "@/models/Order";
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "quickcart-next" });
 
-// inngest function to save user data to a database
 export const syncUserCreation = inngest.createFunction(
     {
         id: "sync-user-from-clerk",
@@ -77,6 +76,8 @@ export const createUserOrder = inngest.createFunction(
     },
     async ({ events }) => {
         const orders = events.map((event) => {
+            console.log("🛒 Orders to insert:", JSON.stringify(event.data.items, null, 2)); // 👈 Check here
+
             return {
                 userId: event.data.userId,
                 items: event.data.items,
@@ -87,6 +88,7 @@ export const createUserOrder = inngest.createFunction(
         })
 
         await connectDB();
+        console.log(JSON.stringify(event.data.items, null, 2));
         await Order.insertMany(orders);
         return {
             success: true,

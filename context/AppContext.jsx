@@ -65,18 +65,19 @@ export const AppContextProvider = (props) => {
         }
     }
 
-    const addToCart = async (itemId) => {
-
+    const addToCart = async (itemId, size) => {
+        const key = size ? `${itemId}:${size}` : itemId;
         let cartData = structuredClone(cartItems);
-        if (cartData[itemId]) {
-            cartData[itemId] += 1;
+    
+        if (cartData[key]) {
+            cartData[key] += 1;
+        } else {
+            cartData[key] = 1;
         }
-        else {
-            cartData[itemId] = 1;
-        }
+    
         setCartItems(cartData);
         toast.success('Item added to cart');
-
+    
         if (user) {
             try {
                 const token = await getToken();
@@ -84,14 +85,13 @@ export const AppContextProvider = (props) => {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                })
-                toast.success('Item added to cart');
+                });
             } catch (error) {
                 toast.error(error.message);
             }
         }
-    }
-
+    };
+    
     const updateCartQuantity = async (itemId, quantity) => {
 
         let cartData = structuredClone(cartItems);
@@ -119,24 +119,26 @@ export const AppContextProvider = (props) => {
 
     const getCartCount = () => {
         let totalCount = 0;
-        for (const items in cartItems) {
-            if (cartItems[items] > 0) {
-                totalCount += cartItems[items];
-            }
+        for (const itemId in cartItems) {
+          const product = products.find((product) => product._id === itemId);
+          if (product && cartItems[itemId] > 0) {
+            totalCount += cartItems[itemId];
+          }
         }
         return totalCount;
-    }
+      };
+      
 
     const getCartAmount = () => {
         let totalAmount = 0;
-        for (const items in cartItems) {
-            let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
-                totalAmount += itemInfo.offerPrice * cartItems[items];
-            }
+        for (const itemId in cartItems) {
+          const product = products.find((product) => product._id === itemId);
+          if (product && cartItems[itemId] > 0) {
+            totalAmount += product.offerPrice * cartItems[itemId];
+          }
         }
         return Math.floor(totalAmount * 100) / 100;
-    }
+      };
 
     useEffect(() => {
         fetchProductData()
@@ -147,7 +149,7 @@ export const AppContextProvider = (props) => {
             fetchUserData();
         }
     }, [user])
-
+      
     const value = {
         user, getToken,
         currency, router,

@@ -19,6 +19,28 @@ const Product = () => {
 
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(null);
+    const [sizeError, setSizeError] = useState("");
+
+    const handleAddToCart = () => {
+        if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
+            setSizeError("Please select a size.");
+            return;
+        }
+        setSizeError("");
+        addToCart(productData._id, selectedSize);
+    };
+
+    const handleBuyNow = () => {
+        if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
+            setSizeError("Please select a size.");
+            return;
+        }
+        setSizeError("");
+        addToCart(productData._id, selectedSize);
+        router.push('/cart');
+    };
+
 
     const fetchProductData = async () => {
         const product = products.find(product => product._id === id);
@@ -113,20 +135,61 @@ const Product = () => {
                         </table>
                     </div>
 
+                    {Array.isArray(productData.size) && productData.size.length > 0 && (
+                        <div className="mb-6">
+                            <p className="text-gray-800 font-medium mb-2">Size:</p>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {["XS", "S", "M", "L", "XL", "XXL"].map((size) => {
+                                    const isAvailable = productData.size.includes(size);
+                                    const isSelected = selectedSize === size;
+
+                                    return (
+                                        <button
+                                            key={size}
+                                            disabled={!isAvailable}
+                                            onClick={() => isAvailable && setSelectedSize(size)}
+                                            className={`
+              px-4 py-2 border rounded-full text-sm font-medium transition 
+              ${isAvailable
+                                                    ? isSelected
+                                                        ? "bg-orange-500 text-white border-orange-500"
+                                                        : "bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300"
+                                                    : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                                                }
+            `}
+                                        >
+                                            {size}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
                     <div className="flex items-center mt-10 gap-4">
-                        <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition">
+                        <button
+                            onClick={handleAddToCart}
+                            className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
+                        >
                             Add to Cart
                         </button>
-                        <button onClick={() => { addToCart(productData._id); router.push('/cart') }} className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition">
+                        <button
+                            onClick={handleBuyNow}
+                            className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"
+                        >
                             Buy now
                         </button>
                     </div>
+
+                    {sizeError && (
+                        <p className="text-red-500 text-sm mt-2">{sizeError}</p>
+                    )}
 
                     <div className="flex flex-col gap-3 mt-6 text-sm text-gray-800/90">
                         <div className="flex items-start gap-3">
                             <RotateCcw className="w-5 h-5 text-gray-700 mt-0.5" />
                             <div>
-                                <p><strong>10 day Return and Exchange</strong></p>
+                                <p><strong>5 day Return and Exchange</strong></p>
                                 <a target="_blank" href="/return-policy" className="text-blue-600 hover:underline text-sm font-medium">
                                     Return and Exchange Policy
                                 </a>
