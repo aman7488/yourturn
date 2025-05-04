@@ -50,8 +50,10 @@ import men_cat from "./men_cat.jpeg";
 import women_cat from "./women_cat.jpeg";
 import kids_cat from "./kids_cat.jpeg";
 import cat_men_png from "./cat_men_png.png";
-import cat_women_png from "./cat_women_png.jpg";
-import cat_kids_png from "./cat_kids_png.jpg";
+import cat_women_png from "./cat_women_png.png";
+import cat_kids_png from "./cat_kids_png.png";
+import newsLetter1 from "./newsLetter1.png";
+import newsLetter2 from "./newsLetter2.png";
 
 export const assets = {
   logo,
@@ -108,6 +110,8 @@ export const assets = {
   cat_men_png,
   cat_women_png,
   cat_kids_png,
+  newsLetter1,
+  newsLetter2,
 };
 
 export const BagIcon = () => {

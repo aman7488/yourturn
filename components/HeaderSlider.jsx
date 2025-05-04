@@ -77,11 +77,12 @@ const HeaderSlider = () => {
                 </button>
               </div>
             </div>
-            <div className="flex items-center flex-1 justify-center">
+            <div className="relative w-72 h-72">
               <Image
-                className="md:w-72 w-48"
                 src={slide.imgSrc}
                 alt={`Slide ${index + 1}`}
+                fill
+                className="object-contain"
               />
             </div>
           </div>
@@ -93,9 +94,8 @@ const HeaderSlider = () => {
           <div
             key={index}
             onClick={() => handleSlideChange(index)}
-            className={`h-2 w-2 rounded-full cursor-pointer ${
-              currentSlide === index ? "bg-orange-600" : "bg-gray-500/30"
-            }`}
+            className={`h-2 w-2 rounded-full cursor-pointer ${currentSlide === index ? "bg-orange-600" : "bg-gray-500/30"
+              }`}
           ></div>
         ))}
       </div>
