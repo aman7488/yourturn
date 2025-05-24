@@ -54,6 +54,9 @@ import cat_women_png from "./cat_women_png.png";
 import cat_kids_png from "./cat_kids_png.png";
 import newsLetter1 from "./newsLetter1.png";
 import newsLetter2 from "./newsLetter2.png";
+import phone from "./phone_logo.png";
+import email from "./email_logo.png";
+import instagram from "./instagram_logo.png";
 
 export const assets = {
   logo,
@@ -112,6 +115,9 @@ export const assets = {
   cat_kids_png,
   newsLetter1,
   newsLetter2,
+  phone,
+  email,
+  instagram,
 };
 
 export const BagIcon = () => {

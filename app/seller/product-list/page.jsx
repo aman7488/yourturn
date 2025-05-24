@@ -11,7 +11,7 @@ import { FiTrash2 } from "react-icons/fi";
 
 const ProductList = () => {
 
-  const { router, getToken, user } = useAppContext()
+  const { currency, router, getToken, user } = useAppContext()
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -100,7 +100,7 @@ const ProductList = () => {
                     </span>
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
-                  <td className="px-4 py-3">${product.offerPrice}</td>
+                  <td className="px-4 py-3">{currency}{product.offerPrice}</td>
                   <td className="px-4 py-3 max-sm:hidden">
                     <div className="flex items-center gap-2">
                       <button

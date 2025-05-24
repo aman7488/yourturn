@@ -12,6 +12,8 @@ const OrderSummary = () => {
 
   const [userAddresses, setUserAddresses] = useState([]);
 
+  const shippingFee = getCartAmount() === 0 ? 0 : (getCartAmount() <= 1000 ? 45 : 65);
+
   const fetchUserAddresses = async () => {
     try {
       const token = await getToken();
@@ -175,15 +177,15 @@ const OrderSummary = () => {
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Shipping Fee</p>
-            <p className="font-medium text-gray-800">Free</p>
+            <p className="font-medium text-gray-800">{currency}{shippingFee}</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">{currency}{Math.floor(getCartAmount() * 0.02)}</p>
+            <p className="text-gray-600">Tax (3%)</p>
+            <p className="font-medium text-gray-800">{currency}{Math.floor(getCartAmount() * 0.03)}</p>
           </div>
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p>{currency}{getCartAmount() + Math.floor(getCartAmount() * 0.02)}</p>
+            <p>{currency}{getCartAmount() + Math.floor(getCartAmount() * 0.03) + shippingFee}</p>
           </div>
         </div>
       </div>
