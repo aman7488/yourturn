@@ -22,25 +22,6 @@ const Product = () => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [sizeError, setSizeError] = useState("");
 
-    // const handleAddToCart = () => {
-    //     if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
-    //         setSizeError("Please select a size.");
-    //         return;
-    //     }
-    //     setSizeError("");
-    //     addToCart(productData._id, selectedSize);
-    // };
-
-    // const handleBuyNow = () => {
-    //     if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
-    //         setSizeError("Please select a size.");
-    //         return;
-    //     }
-    //     setSizeError("");
-    //     addToCart(productData._id, selectedSize);
-    //     router.push('/cart');
-    // };
-
     const handleAddToCart = () => {
         if (
             Array.isArray(productData.size) &&
@@ -150,11 +131,15 @@ const Product = () => {
                             <tbody>
                                 <tr>
                                     <td className="text-gray-600 font-medium">Brand</td>
-                                    <td className="text-gray-800/50 ">Generic</td>
+                                    <td className="text-gray-800/50 ">
+                                        {productData.brand || "Generic"}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="text-gray-600 font-medium">Color</td>
-                                    <td className="text-gray-800/50 ">Multi</td>
+                                    <td className="text-gray-800/50 ">
+                                        {productData.color || "N/A"}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="text-gray-600 font-medium">Category</td>
@@ -165,36 +150,6 @@ const Product = () => {
                             </tbody>
                         </table>
                     </div>
-
-                    {/* {Array.isArray(productData.size) && productData.size.length > 0 && (
-                        <div className="mb-6">
-                            <p className="text-gray-800 font-medium mb-2">Size:</p>
-                            <div className="flex items-center gap-2 flex-wrap">
-                                {["XS", "S", "M", "L", "XL", "XXL"].map((size) => {
-                                    const isAvailable = productData.size.includes(size);
-                                    const isSelected = selectedSize === size;
-                                    return (
-                                        <button
-                                            key={size}
-                                            disabled={!isAvailable}
-                                            onClick={() => isAvailable && setSelectedSize(size)}
-                                            className={`
-              px-4 py-2 border rounded-full text-sm font-medium transition 
-              ${isAvailable
-                                                    ? isSelected
-                                                        ? "bg-orange-500 text-white border-orange-500"
-                                                        : "bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300"
-                                                    : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                                                }
-            `}
-                                        >
-                                            {size}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )} */}
 
                     {Array.isArray(productData.size) && productData.size.length > 0 && (
                         <div className="mb-6">

@@ -26,9 +26,12 @@ export async function POST(req) {
         const formData = await req.formData();
         const name = formData.get("name");
         const description = formData.get("description");
+        const brand = formData.get("brand");
+        const color = formData.get("color");
         const price = formData.get("price");
         const category = formData.get("category");
         const offerPrice = formData.get("offerPrice");
+        const itemType = formData.get("itemType");
         const size = formData.getAll("size");
         const files = formData.getAll("images");
         if (!files || files.length === 0) {
@@ -63,9 +66,12 @@ export async function POST(req) {
             userId,
             name,
             description,
+            brand,
+            color,
             price: Number(price),
             category,
             offerPrice: Number(offerPrice),
+            itemType,
             image: images,
             date: Date.now(),
             size,
