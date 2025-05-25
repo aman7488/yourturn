@@ -22,24 +22,55 @@ const Product = () => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [sizeError, setSizeError] = useState("");
 
-    const handleAddToCart = () => {
-        if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
-            setSizeError("Please select a size.");
-            return;
-        }
-        setSizeError("");
-        addToCart(productData._id, selectedSize);
-    };
+    // const handleAddToCart = () => {
+    //     if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
+    //         setSizeError("Please select a size.");
+    //         return;
+    //     }
+    //     setSizeError("");
+    //     addToCart(productData._id, selectedSize);
+    // };
 
-    const handleBuyNow = () => {
-        if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
+    // const handleBuyNow = () => {
+    //     if (Array.isArray(productData.size) && productData.size.length > 0 && !selectedSize) {
+    //         setSizeError("Please select a size.");
+    //         return;
+    //     }
+    //     setSizeError("");
+    //     addToCart(productData._id, selectedSize);
+    //     router.push('/cart');
+    // };
+
+    const handleAddToCart = () => {
+        if (
+            Array.isArray(productData.size) &&
+            productData.size.length > 0 &&
+            productData.size[0] !== "FS" &&
+            !selectedSize
+        ) {
             setSizeError("Please select a size.");
             return;
         }
         setSizeError("");
-        addToCart(productData._id, selectedSize);
-        router.push('/cart');
+        const sizeToSend = productData.size[0] === "FS" ? null : selectedSize;
+        addToCart(productData._id, sizeToSend);
     };
+    
+    const handleBuyNow = () => {
+        if (
+            Array.isArray(productData.size) &&
+            productData.size.length > 0 &&
+            productData.size[0] !== "FS" &&
+            !selectedSize
+        ) {
+            setSizeError("Please select a size.");
+            return;
+        }
+        setSizeError("");
+        const sizeToSend = productData.size[0] === "FS" ? null : selectedSize;
+        addToCart(productData._id, sizeToSend);
+        router.push("/cart");
+    };    
 
 
     const fetchProductData = async () => {
@@ -135,14 +166,13 @@ const Product = () => {
                         </table>
                     </div>
 
-                    {Array.isArray(productData.size) && productData.size.length > 0 && (
+                    {/* {Array.isArray(productData.size) && productData.size.length > 0 && (
                         <div className="mb-6">
                             <p className="text-gray-800 font-medium mb-2">Size:</p>
                             <div className="flex items-center gap-2 flex-wrap">
                                 {["XS", "S", "M", "L", "XL", "XXL"].map((size) => {
                                     const isAvailable = productData.size.includes(size);
                                     const isSelected = selectedSize === size;
-
                                     return (
                                         <button
                                             key={size}
@@ -162,6 +192,62 @@ const Product = () => {
                                         </button>
                                     );
                                 })}
+                            </div>
+                        </div>
+                    )} */}
+
+                    {Array.isArray(productData.size) && productData.size.length > 0 && (
+                        <div className="mb-6">
+                            <p className="text-gray-800 font-medium mb-2">Size:</p>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {(() => {
+                                    const sizes = productData.size;
+                                    const isFreeSize = sizes.length === 1 && sizes[0] === "FS";
+
+                                    if (isFreeSize) {
+                                        return (
+                                            <button
+                                                disabled
+                                                className="px-4 py-2 border rounded-full text-sm font-medium bg-orange-500 text-white border-orange-500 cursor-not-allowed"
+                                            >
+                                                Free Size
+                                            </button>
+                                        );
+                                    }
+
+                                    const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
+                                    const SHOE_SIZES = ["5", "6", "7", "8", "9", "10", "11", "12"];
+
+                                    const availableSizes = sizes.map(String);
+                                    const isClothing = CLOTHING_SIZES.some(size => availableSizes.includes(size));
+                                    const isShoes = SHOE_SIZES.some(size => availableSizes.includes(size));
+
+                                    const sizeOptions = isClothing ? CLOTHING_SIZES : isShoes ? SHOE_SIZES : [];
+
+                                    return sizeOptions.map(size => {
+                                        const isAvailable = availableSizes.includes(size);
+                                        const isSelected = selectedSize === size;
+
+                                        return (
+                                            <button
+                                                key={size}
+                                                disabled={!isAvailable}
+                                                onClick={() => isAvailable && setSelectedSize(size)}
+                                                className={`
+                                px-4 py-2 border rounded-full text-sm font-medium transition 
+                                ${isAvailable
+                                                        ? isSelected
+                                                            ? "bg-orange-500 text-white border-orange-500"
+                                                            : "bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300"
+                                                        : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                                                    }
+                            `}
+                                            >
+                                                {size}
+                                            </button>
+                                        );
+                                    });
+                                })()}
                             </div>
                         </div>
                     )}
