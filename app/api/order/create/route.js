@@ -14,21 +14,6 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: "Address and items are required" }, { status: 400 });
     }
 
-    // const amount = await items.reduce(async (accPromise, item) => {
-    //   const acc = await accPromise;
-    //   const product = await Product.findById(item.product);
-
-    //   if (!product) {
-    //     throw new Error(`Product not found: ${item.product}`);
-    //   }
-
-    //   const itemCost = product.offerPrice * item.quantity;
-    //   const shippingFee = itemCost === 0 ? 0 : (itemCost <= 1000 ? 45 : 65);
-    //   const tax = Math.floor(itemCost * 0.03);
-
-    //   return acc + (product.offerPrice * item.quantity);
-    // }, Promise.resolve(0));
-
     let productTotal = 0;
     for (const item of items) {
       const product = await Product.findById(item.product);

@@ -74,12 +74,14 @@ const ProductList = () => {
           <table className=" table-fixed w-full overflow-hidden">
             <thead className="text-gray-900 text-sm text-left">
               <tr>
-                <th className="w-2/3 md:w-2/5 px-4 py-3 font-medium truncate">Product</th>
-                <th className="px-4 py-3 font-medium truncate max-sm:hidden">Category</th>
-                <th className="px-4 py-3 font-medium truncate">
-                  Price
-                </th>
-                <th className="px-4 py-3 font-medium truncate max-sm:hidden">Action</th>
+                <thead className="text-gray-900 text-sm text-left">
+                  <tr>
+                    <th className="w-1/2 px-4 py-3 font-medium">Product</th>
+                    <th className="px-4 py-3 font-medium">Category</th>
+                    <th className="px-4 py-3 font-medium">Price</th>
+                    <th className="px-4 py-3 font-medium">Action</th>
+                  </tr>
+                </thead>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-500">
@@ -101,13 +103,13 @@ const ProductList = () => {
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
                   <td className="px-4 py-3">{currency}{product.offerPrice}</td>
-                  <td className="px-4 py-3 max-sm:hidden">
-                    <div className="flex items-center gap-2">
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => router.push(`/product/${product._id}`)}
-                        className="flex items-center gap-1 px-2 py-2 bg-orange-600 text-white rounded-md"
+                        className="flex items-center gap-1 px-2 py-1 bg-orange-600 text-white text-xs rounded-md"
                       >
-                        <span className="hidden md:block">Visit</span>
+                        <span>Visit</span>
                         <Image
                           className="h-3.5"
                           src={assets.redirect_icon}
@@ -115,15 +117,20 @@ const ProductList = () => {
                         />
                       </button>
                       <button
+                        onClick={() => router.push(`/seller/edit-product/${product._id}`)}
+                        className="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white text-xs rounded"
+                      >
+                        Edit
+                      </button>
+                      <button
                         onClick={() => deleteProduct(product._id)}
-                        className="flex items-center gap-1 px-2 py-2 bg-red-600 text-white rounded-md"
+                        className="flex items-center gap-1 px-2 py-1 bg-red-600 text-white text-xs rounded-md"
                       >
                         <FiTrash2 className="text-sm" />
-                        <span className="hidden md:block">Delete</span>
+                        <span>Delete</span>
                       </button>
                     </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>
