@@ -13,11 +13,23 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    email: {
+        type: String,
+        required: false,
+    },
     pincode: {
         type: Number,
         required: true,
     },
+    flat: {
+        type: String,
+        required: true,
+    },
     area: {
+        type: String,
+        required: true,
+    },
+    landmark: {
         type: String,
         required: false,
     },

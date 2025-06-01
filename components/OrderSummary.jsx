@@ -3,13 +3,14 @@ import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const OrderSummary = () => {
 
   const { currency, router, getCartCount, getCartAmount, getToken, user, cartItems, setCartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [userAddresses, setUserAddresses] = useState([]);
 
   const shippingFee = getCartAmount() === 0 ? 0 : (getCartAmount() <= 1000 ? 45 : 65);
@@ -41,12 +42,38 @@ const OrderSummary = () => {
     setIsDropdownOpen(false);
   };
 
+  const handleDeleteAddress = async (addressId, e) => {
+    e.stopPropagation(); // Prevent dropdown close/select when clicking delete
+
+    const confirmed = window.confirm("Are you sure you want to delete this address?");
+    if (!confirmed) return;
+
+    try {
+      const token = await getToken();
+      const { data } = await axios.delete(`/api/user/delete-address?id=${addressId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+        // Refresh addresses list after deletion
+        fetchUserAddresses();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const createOrder = async () => {
     try {
       if (!selectedAddress) {
         return toast.error("Please select an address");
       }
-  
+
       let cartItemsArray = Object.keys(cartItems).map((key) => {
         const [productId, size] = key.split(":");
         return {
@@ -55,13 +82,13 @@ const OrderSummary = () => {
           quantity: cartItems[key],
         };
       });
-  
+
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0);
-  
+
       if (cartItemsArray.length === 0) {
         return toast.error("Your cart is empty");
       }
-  
+
       const token = await getToken();
       const { data } = await axios.post(
         "/api/order/create",
@@ -75,7 +102,7 @@ const OrderSummary = () => {
           }
         }
       );
-  
+
       if (data.success) {
         toast.success(data.message);
         setCartItems({});
@@ -128,17 +155,26 @@ const OrderSummary = () => {
             </button>
 
             {isDropdownOpen && (
-              <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
+              <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5 max-h-72 overflow-auto">
                 {userAddresses.map((address, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
+                    className="flex justify-between items-center px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
                     onClick={() => handleAddressSelect(address)}
                   >
                     <div className="text-sm">
                       {address.fullName}, {address.area}, {address.city}, {address.state} - {address.pincode}
+                      <div className="text-xs text-gray-600">Mob: {address.phoneNumber}</div>
                     </div>
-                    <div className="text-xs text-gray-600">Mob: {address.phoneNumber}</div>
+                    {/* Delete button */}
+                    <button
+                      onClick={(e) => handleDeleteAddress(address._id, e)}
+                      className="ml-2 text-red-600 hover:text-red-800"
+                      title="Delete Address"
+                      aria-label="Delete Address"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </button>
                   </li>
                 ))}
                 <li

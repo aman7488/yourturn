@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.18.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
     "axios": "^1.9.0",
     "cloudinary": "^2.6.0",
+    "firebase": "^11.8.1",
     "inngest": "^3.35.1",
     "lucide-react": "^0.507.0",
     "mongoose": "^8.14.0",

@@ -79,7 +79,7 @@ const MyOrders = () => {
                                     <p className="flex flex-col">
                                         <span>Method : COD</span>
                                         <span>Date : {new Date(order.date).toLocaleDateString()}</span>
-                                        <span>Payment : Pending</span>
+                                        <span>Status : {order.status}</span>
                                     </p>
                                 </div>
                             </div>
