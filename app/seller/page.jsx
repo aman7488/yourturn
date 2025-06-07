@@ -15,12 +15,31 @@ const AddProduct = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [brand, setBrand] = useState('Generic');
-  const [color, setColor] = useState('N/A');
+  // const [color, setColor] = useState('N/A');
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [size, setSize] = useState([]);
   const [itemType, setItemType] = useState('Clothing');
+  const [variants, setVariants] = useState(['']);
+
+  const handleVariantChange = (index, value) => {
+    const updatedVariants = [...variants];
+    updatedVariants[index] = value;
+    setVariants(updatedVariants);
+  };
+
+  const addVariant = () => {
+    setVariants([...variants, '']);
+  };
+
+  const removeVariant = (index) => {
+    if (variants.length > 1) {
+      const updatedVariants = [...variants];
+      updatedVariants.splice(index, 1);
+      setVariants(updatedVariants);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,12 +48,12 @@ const AddProduct = () => {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("brand", brand);
-    formData.append("color", color);
+    // formData.append("color", color);
     formData.append("price", price);
     formData.append("category", category);
     formData.append("offerPrice", offerPrice);
     formData.append("itemType", itemType);
-    // size.forEach(s => formData.append("size", s));
+    variants.forEach(v => formData.append("variants", v));
     const processedSizes = size.includes("Free Size") ? ["FS"] : size;
     processedSizes.forEach(s => formData.append("size", s));
     files.forEach((file) => {
@@ -59,7 +78,7 @@ const AddProduct = () => {
         setName("");
         setDescription("");
         setBrand("Generic");
-        setColor("N/A");
+        // setColor("N/A");
         setCategory("");
         setPrice("");
         setOfferPrice("");
@@ -82,7 +101,7 @@ const AddProduct = () => {
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="md:p-10 p-4 max-w-6xl w-full mx-auto">
         <div className="flex flex-col md:flex-row gap-10">
-          
+
           {/* LEFT COLUMN */}
           <div className="flex-1 space-y-5">
             {/* Images */}
@@ -158,7 +177,7 @@ const AddProduct = () => {
                 />
               </div>
               <div className="flex flex-col gap-1 w-40">
-                <label className="text-base font-medium" htmlFor="color">Color</label>
+                {/* <label className="text-base font-medium" htmlFor="color">Color</label>
                 <input
                   id="color"
                   type="text"
@@ -167,116 +186,147 @@ const AddProduct = () => {
                   onChange={(e) => setColor(e.target.value)}
                   value={color}
                 />
+              </div> */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-base font-medium">Variant Product IDs</label>
+                  {variants.map((variant, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="Enter product ID"
+                        className="outline-none md:py-2 py-1.5 px-3 rounded border border-gray-500/40 flex-1"
+                        value={variant}
+                        onChange={(e) => handleVariantChange(index, e.target.value)}
+                      />
+                      {variants.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeVariant(index)}
+                          className="text-red-500 font-bold px-2 py-1"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addVariant}
+                    className="self-start text-sm text-blue-500 mt-1 flex items-center gap-1"
+                  >
+                    <span>+ Add</span>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Category, Item Type */}
-            <div className="flex items-center gap-5 flex-wrap">
-              <div className="flex flex-col gap-1 w-32">
-                <label className="text-base font-medium" htmlFor="category">Category</label>
-                <select
-                  id="category"
-                  className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                  onChange={(e) => setCategory(e.target.value)}
-                  value={category}
-                  required
-                >
-                  <option value="">Select</option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Kids">Kids</option>
-                </select>
-              </div>
+              {/* Category, Item Type */}
+              <div className="flex items-center gap-5 flex-wrap">
+                <div className="flex flex-col gap-1 w-32">
+                  <label className="text-base font-medium" htmlFor="category">Category</label>
+                  <select
+                    id="category"
+                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                    onChange={(e) => setCategory(e.target.value)}
+                    value={category}
+                    required
+                  >
+                    <option value="">Select</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                  </select>
+                </div>
 
-              <div className="flex flex-col gap-1 w-40">
-                <label className="text-base font-medium" htmlFor="itemType">Item Type</label>
-                <select
-                  id="itemType"
-                  className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                  onChange={(e) => {
-                    setItemType(e.target.value);
-                    setSize([]);
-                  }}
-                  value={itemType}
-                  required
-                >
-                  <option value="Clothing">Clothing</option>
-                  <option value="Footwear">Footwear</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Sizes */}
-            <div className="flex flex-col gap-1">
-              <label className="text-base font-medium">Available Sizes</label>
-              <div className="flex gap-3 flex-wrap items-center">
-                <label className="flex items-center gap-1 font-medium text-orange-600">
-                  <input
-                    type="checkbox"
-                    value="Free Size"
-                    checked={size.includes("Free Size")}
+                <div className="flex flex-col gap-1 w-40">
+                  <label className="text-base font-medium" htmlFor="itemType">Item Type</label>
+                  <select
+                    id="itemType"
+                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
                     onChange={(e) => {
-                      if (e.target.checked) {
-                        setSize(["Free Size"]);
-                      } else {
-                        setSize([]);
-                      }
+                      setItemType(e.target.value);
+                      setSize([]);
                     }}
-                  />
-                  Free Size
-                </label>
-                {availableSizes.map((sizeOption) => (
-                  <label key={sizeOption} className="flex items-center gap-1 text-sm">
+                    value={itemType}
+                    required
+                  >
+                    <option value="Clothing">Clothing</option>
+                    <option value="Footwear">Footwear</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Sizes */}
+              <div className="flex flex-col gap-1">
+                <label className="text-base font-medium">Available Sizes</label>
+                <div className="flex gap-3 flex-wrap items-center">
+                  <label className="flex items-center gap-1 font-medium text-orange-600">
                     <input
                       type="checkbox"
-                      value={sizeOption}
-                      disabled={size.includes("Free Size")}
-                      checked={size.includes(sizeOption)}
+                      value="Free Size"
+                      checked={size.includes("Free Size")}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setSize([...size, sizeOption]);
+                          setSize(["Free Size"]);
                         } else {
-                          setSize(size.filter((s) => s !== sizeOption));
+                          setSize([]);
                         }
                       }}
                     />
-                    {sizeOption}
+                    Free Size
                   </label>
-                ))}
+                  {availableSizes.map((sizeOption) => (
+                    <label key={sizeOption} className="flex items-center gap-1 text-sm">
+                      <input
+                        type="checkbox"
+                        value={sizeOption}
+                        disabled={size.includes("Free Size")}
+                        checked={size.includes(sizeOption)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSize([...size, sizeOption]);
+                          } else {
+                            setSize(size.filter((s) => s !== sizeOption));
+                          }
+                        }}
+                      />
+                      {sizeOption}
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Prices */}
-            <div className="flex items-center gap-5 flex-wrap">
-              <div className="flex flex-col gap-1 w-32">
-                <label className="text-base font-medium" htmlFor="product-price">Product Price</label>
-                <input
-                  id="product-price"
-                  type="number"
-                  placeholder="0"
-                  className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                  onChange={(e) => setPrice(e.target.value)}
-                  value={price}
-                  required
-                />
+              {/* Prices */}
+              <div className="flex items-center gap-5 flex-wrap">
+                <div className="flex flex-col gap-1 w-32">
+                  <label className="text-base font-medium" htmlFor="product-price">Product Price</label>
+                  <input
+                    id="product-price"
+                    type="number"
+                    placeholder="0"
+                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-1 w-32">
+                  <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
+                  <input
+                    id="offer-price"
+                    type="number"
+                    placeholder="0"
+                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                    onChange={(e) => setOfferPrice(e.target.value)}
+                    value={offerPrice}
+                    required
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-1 w-32">
-                <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
-                <input
-                  id="offer-price"
-                  type="number"
-                  placeholder="0"
-                  className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                  onChange={(e) => setOfferPrice(e.target.value)}
-                  value={offerPrice}
-                  required
-                />
-              </div>
-            </div>
 
-            <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
-              ADD
-            </button>
+              <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
+                ADD
+              </button>
+            </div>
           </div>
         </div>
       </form>

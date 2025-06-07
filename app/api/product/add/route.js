@@ -27,13 +27,14 @@ export async function POST(req) {
         const name = formData.get("name");
         const description = formData.get("description");
         const brand = formData.get("brand");
-        const color = formData.get("color");
+        // const color = formData.get("color");
         const price = formData.get("price");
         const category = formData.get("category");
         const offerPrice = formData.get("offerPrice");
         const itemType = formData.get("itemType");
         const size = formData.getAll("size");
         const files = formData.getAll("images");
+        const variants = formData.getAll("variants");
         if (!files || files.length === 0) {
             return NextResponse.json({ success: false, message: "No files uploaded" }, { status: 400 });
         }
@@ -67,7 +68,7 @@ export async function POST(req) {
             name,
             description,
             brand,
-            color,
+            variants: variants.filter(v => v.trim() !== ''),
             price: Number(price),
             category,
             offerPrice: Number(offerPrice),

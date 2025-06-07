@@ -74,14 +74,10 @@ const ProductList = () => {
           <table className=" table-fixed w-full overflow-hidden">
             <thead className="text-gray-900 text-sm text-left">
               <tr>
-                <thead className="text-gray-900 text-sm text-left">
-                  <tr>
-                    <th className="w-1/2 px-4 py-3 font-medium">Product</th>
-                    <th className="px-4 py-3 font-medium">Category</th>
-                    <th className="px-4 py-3 font-medium">Price</th>
-                    <th className="px-4 py-3 font-medium">Action</th>
-                  </tr>
-                </thead>
+                <th className="w-2/5 px-4 py-3 font-medium">Product</th>
+                <th className="px-4 py-3 font-medium">Category</th>
+                <th className="px-4 py-3 font-medium">Price</th>
+                <th className="w-1/4 px-4 py-3 font-medium">Action</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-500">
@@ -98,7 +94,7 @@ const ProductList = () => {
                       />
                     </div>
                     <span className="truncate w-full">
-                      {product.name}
+                      {product.name} <br /> ID: {product._id}
                     </span>
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
