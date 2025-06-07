@@ -18,7 +18,7 @@ const EditProduct = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [brand, setBrand] = useState('');
-    const [color, setColor] = useState('');
+    const [variants, setVariants] = useState(['']);
     const [category, setCategory] = useState('');
     const [price, setPrice] = useState('');
     const [offerPrice, setOfferPrice] = useState('');
@@ -44,7 +44,7 @@ const EditProduct = () => {
                 setName(p.name);
                 setDescription(p.description);
                 setBrand(p.brand);
-                setColor(p.color);
+                setVariants(p.variants || ['']);
                 setCategory(p.category);
                 setPrice(p.price);
                 setOfferPrice(p.offerPrice);
@@ -56,6 +56,24 @@ const EditProduct = () => {
             }
         } catch (err) {
             toast.error(err.message);
+        }
+    };
+
+    const handleVariantChange = (index, value) => {
+        const updatedVariants = [...variants];
+        updatedVariants[index] = value;
+        setVariants(updatedVariants);
+    };
+
+    const addVariant = () => {
+        setVariants([...variants, '']);
+    };
+
+    const removeVariant = (index) => {
+        if (variants.length > 1) {
+            const updatedVariants = [...variants];
+            updatedVariants.splice(index, 1);
+            setVariants(updatedVariants);
         }
     };
 
@@ -73,12 +91,12 @@ const EditProduct = () => {
                 name,
                 description,
                 brand,
-                color,
                 price,
                 offerPrice,
                 category,
                 itemType,
                 size: processedSizes,
+                variants: variants.filter(v => v.trim() !== '')
             };
 
             const { data } = await axios.put(`/api/product/edit/${id}`, payload, {
@@ -151,7 +169,7 @@ const EditProduct = () => {
 
                     {/* RIGHT COLUMN */}
                     <div className="flex-1 space-y-5">
-                        {/* Brand and Color */}
+                        {/* Brand and Variants */}
                         <div className="flex gap-5 flex-wrap">
                             <div className="flex flex-col gap-1 w-40">
                                 <label className="text-base font-medium">Brand</label>
@@ -163,13 +181,33 @@ const EditProduct = () => {
                                 />
                             </div>
                             <div className="flex flex-col gap-1 w-40">
-                                <label className="text-base font-medium">Color</label>
-                                <input
-                                    type="text"
-                                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                                    value={color}
-                                    onChange={(e) => setColor(e.target.value)}
-                                />
+                                <label className="text-base font-medium">Variant IDs</label>
+                                {variants.map((variant, index) => (
+                                    <div key={index} className="flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            className="outline-none md:py-2 py-1.5 px-3 rounded border border-gray-500/40 flex-1"
+                                            value={variant}
+                                            onChange={(e) => handleVariantChange(index, e.target.value)}
+                                        />
+                                        {variants.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeVariant(index)}
+                                                className="text-red-500 font-bold px-2 py-1"
+                                            >
+                                                ×
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={addVariant}
+                                    className="self-start text-sm text-blue-500 mt-1 flex items-center gap-1"
+                                >
+                                    <span>+ Add variant</span>
+                                </button>
                             </div>
                         </div>
 

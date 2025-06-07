@@ -33,12 +33,12 @@ export async function PUT(req, { params }) {
       name: body.name,
       description: body.description,
       brand: body.brand,
-      color: body.color,
       category: body.category,
       price: body.price,
       offerPrice: body.offerPrice,
       itemType: body.itemType,
       size: body.size,
+      variants: body.variants || []
     };
 
     await connectDB();

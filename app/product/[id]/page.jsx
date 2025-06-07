@@ -36,7 +36,7 @@ const Product = () => {
         const sizeToSend = productData.size[0] === "FS" ? null : selectedSize;
         addToCart(productData._id, sizeToSend);
     };
-    
+
     const handleBuyNow = () => {
         if (
             Array.isArray(productData.size) &&
@@ -51,7 +51,7 @@ const Product = () => {
         const sizeToSend = productData.size[0] === "FS" ? null : selectedSize;
         addToCart(productData._id, sizeToSend);
         router.push("/cart");
-    };    
+    };
 
 
     const fetchProductData = async () => {
@@ -136,12 +136,6 @@ const Product = () => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="text-gray-600 font-medium">Color</td>
-                                    <td className="text-gray-800/50 ">
-                                        {productData.color || "N/A"}
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td className="text-gray-600 font-medium">Category</td>
                                     <td className="text-gray-800/50">
                                         {productData.category}
@@ -152,7 +146,7 @@ const Product = () => {
                     </div>
 
                     {Array.isArray(productData.size) && productData.size.length > 0 && (
-                        <div className="mb-6">
+                        <div className="mb-2">
                             <p className="text-gray-800 font-medium mb-2">Size:</p>
                             <div className="flex items-center gap-2 flex-wrap">
                                 {(() => {
@@ -203,6 +197,51 @@ const Product = () => {
                                         );
                                     });
                                 })()}
+                            </div>
+                        </div>
+                    )}
+
+                    {productData.variants && productData.variants.length > 0 && (
+                        <div className="mt-4">
+                            <h3 className="text-xl font-medium mb-2">Other Variants</h3>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                                {productData.variants.map((variantId) => {
+                                    const variantProduct = products.find(p => p._id === variantId);
+                                    if (!variantProduct) return null;
+
+                                    return (
+                                        <div
+                                            key={variantId}
+                                            onClick={() => router.push(`/product/${variantId}`)}
+                                            className="cursor-pointer group"
+                                        >
+                                            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-2 relative">
+                                                <Image
+                                                    src={variantProduct.image?.[0] || assets.placeholder_image}
+                                                    alt={variantProduct.name}
+                                                    fill
+                                                    className="object-contain mix-blend-multiply group-hover:opacity-90 transition"
+                                                />
+                                                {variantProduct.offerPrice < productData.offerPrice && (
+                                                    <div className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
+                                                        Cheaper
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* <p className="text-sm font-medium truncate">{variantProduct.name}</p>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-medium text-orange-600">
+                                                    {currency}{variantProduct.offerPrice}
+                                                </p>
+                                                {variantProduct.price > variantProduct.offerPrice && (
+                                                    <p className="text-xs text-gray-500 line-through">
+                                                        {currency}{variantProduct.price}
+                                                    </p>
+                                                )}
+                                            </div> */}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
