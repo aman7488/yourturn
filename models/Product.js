@@ -18,6 +18,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    color: {
+        type: String,
+        required: false,
+        default: "N/A"
+    },
     variants: {
         type: [String],
         required: false,

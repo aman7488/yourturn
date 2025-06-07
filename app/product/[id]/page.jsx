@@ -136,6 +136,12 @@ const Product = () => {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td className="text-gray-600 font-medium">Color</td>
+                                    <td className="text-gray-800/50 ">
+                                        {productData.color || "N/A"}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td className="text-gray-600 font-medium">Category</td>
                                     <td className="text-gray-800/50">
                                         {productData.category}
@@ -146,7 +152,7 @@ const Product = () => {
                     </div>
 
                     {Array.isArray(productData.size) && productData.size.length > 0 && (
-                        <div className="mb-2">
+                        <div className="mb-6">
                             <p className="text-gray-800 font-medium mb-2">Size:</p>
                             <div className="flex items-center gap-2 flex-wrap">
                                 {(() => {

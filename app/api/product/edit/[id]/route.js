@@ -34,6 +34,7 @@ export async function PUT(req, { params }) {
       description: body.description,
       brand: body.brand,
       category: body.category,
+      color: body.color,
       price: body.price,
       offerPrice: body.offerPrice,
       itemType: body.itemType,

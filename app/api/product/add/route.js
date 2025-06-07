@@ -27,6 +27,7 @@ export async function POST(req) {
         const name = formData.get("name");
         const description = formData.get("description");
         const brand = formData.get("brand");
+        const color = formData.get("color");
         const price = formData.get("price");
         const category = formData.get("category");
         const offerPrice = formData.get("offerPrice");
@@ -67,6 +68,7 @@ export async function POST(req) {
             name,
             description,
             brand,
+            color,
             variants: variants.filter(v => v.trim() !== ''),
             price: Number(price),
             category,

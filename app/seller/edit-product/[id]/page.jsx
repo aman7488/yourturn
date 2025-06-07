@@ -18,6 +18,7 @@ const EditProduct = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [brand, setBrand] = useState('');
+    const [color, setColor] = useState('');
     const [variants, setVariants] = useState(['']);
     const [category, setCategory] = useState('');
     const [price, setPrice] = useState('');
@@ -46,6 +47,7 @@ const EditProduct = () => {
                 setBrand(p.brand);
                 setVariants(p.variants || ['']);
                 setCategory(p.category);
+                setColor(p.color);
                 setPrice(p.price);
                 setOfferPrice(p.offerPrice);
                 setSize(p.size.includes("FS") ? ["Free Size"] : p.size);
@@ -92,6 +94,7 @@ const EditProduct = () => {
                 description,
                 brand,
                 price,
+                color,
                 offerPrice,
                 category,
                 itemType,
@@ -169,7 +172,7 @@ const EditProduct = () => {
 
                     {/* RIGHT COLUMN */}
                     <div className="flex-1 space-y-5">
-                        {/* Brand and Variants */}
+                        {/* Brand and Color */}
                         <div className="flex gap-5 flex-wrap">
                             <div className="flex flex-col gap-1 w-40">
                                 <label className="text-base font-medium">Brand</label>
@@ -178,6 +181,15 @@ const EditProduct = () => {
                                     className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
                                     value={brand}
                                     onChange={(e) => setBrand(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-1 w-40">
+                                <label className="text-base font-medium">Color</label>
+                                <input
+                                    type="text"
+                                    className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                                    value={color}
+                                    onChange={(e) => setColor(e.target.value)}
                                 />
                             </div>
                             <div className="flex flex-col gap-1 w-40">
